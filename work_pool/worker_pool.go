@@ -36,6 +36,7 @@ func (p *WorkerPool) GetWorker() *Worker {
 	defer p.locker.Unlock()
 	p.cap += 1
 	wworker := NewWorker(time.Now().Unix())
+	wworker.Dojob()
 	p.worker = append(p.worker, wworker)
 	return wworker
 }

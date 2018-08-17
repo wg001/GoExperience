@@ -2,12 +2,12 @@ package work_pool
 
 import (
 	"fmt"
-	"strconv"
+	"time"
 )
 
 type Worker struct {
 	id        int64
-	job       interface{}
+	job       chan interface{}
 	cancel    bool
 	isworking bool
 }
@@ -17,5 +17,10 @@ func NewWorker(id int64) *Worker {
 }
 
 func (w *Worker) Dojob() {
-	fmt.Println("工人[id=" + strconv.Itoa(int(w.id)) + "]在做工作")
+	select {
+	case <-w.job:
+		fmt.Println("get work to do")
+	case <-time.After(time.Duration(10*time.Second)):
+		fmt.Println("work waited too long")
+	}
 }
